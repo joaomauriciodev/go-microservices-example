@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  order-service:
+    build: ./order-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - user-service
+      - product-service
+  product-service:
+    build: ./product-service
+    ports:
+      - "8001:8001"
+    
+  user-service:
+    build: ./user-service
+    ports:
+      - "8002:8002"
+
+volumes:
+  postgres-data:
